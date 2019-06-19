@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>WhatsLAN</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="assets/msgs.js" charset="utf-8"></script>
+
+  </head>
+  <body>
+    Welcome <%= name %><br>
+    <form action="/remnn" method="post" id="frm">
+      <input type="button"value="Remove Nickname" onclick="func()">
+    </form>
+    <script type="text/javascript">
+      function func()
+      {
+        if(confirm("This will also delete all chats. Are you sure?"))
+          document.getElementById("frm").submit();
+      }
+    </script>
+    <br><br><form action="/msg" method="post" id="sendmsgfrm">
+      <input type="text" name="toip" placeholder="IP address" id="sendto" required>
+      <input type="text" name="msg" placeholder="Hello!" id="sendmsg" required>
+      <input type="submit" name="" value="Send Message!">
+    </form>
+    <ul id='msgs'>
+
+    </ul>
+  </body>
+</html>

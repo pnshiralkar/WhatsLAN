@@ -3,14 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>WhatsLAN</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   </head>
   <body>
-    <h1>WhatsLAN</h1>
+  <div class="jumbotron jumbotron-fluid bg-primary text-white text-center" style="padding-bottom: 5px; -webkit-box-shadow: rrgba(0,0,0,0.9) 0px -12px 20px 11px;-moz-box-shadow: rgba(0,0,0,0.9) 0px -12px 20px 11px;box-shadow: rgba(0,0,0,0.9) 0px -12px 20px 11px;">
+  <h1 class="display-4  font-weight-bold">WhatsLAN</h1>
+  <p class="lead-4">A LAN messenger</p>
+  <p class="lead user" style="text-align: right; width: 100%; padding-right: 15px; cursor:pointer;" onclick="logout()"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;</p>
+  </div>
+  <br><br>
+  <div class="text-center">
     <br><h3>Create a nickname to get started - <br>*You can delete it later</h3>
     <br>
     <form action="/setnn" method="post">
-        <input type="text" name="nn" placeholder="Nickname"><br>
+        <input type="text" name="nn" placeholder="Nickname">
         <input type="submit" value="GO">
     </form>
+  </div>
   </body>
 </html>

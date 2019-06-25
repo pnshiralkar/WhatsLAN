@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
 const Observable = require('object-observer/dist/node/object-observer').Observable;
+const process = require('process');
 var date = require('./modules/date');
 
 var app = express();
@@ -16,7 +17,7 @@ var obsNewMsg = Observable.from(newmsg);
 const User = require('./models/users');
 const Message = require('./models/message');
 
-mongoose.connect('mongodb://localhost/testdb', { useNewUrlParser: true });
+mongoose.connect('mongodb+srv://user1:DNlP4zZPgpJNgJux@cluster0-mujak.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true });
 
 mongoose.connection.once('open', ()=>{
   //connecetd!
@@ -41,6 +42,10 @@ app.get('/', (req, res)=>{
   }
 });
 
+app.post('/getip', (req, res)=>{
+  res.end(req.ip.split(":")[3]);
+});
+
 app.post('/setnn', (req, res)=>{
   if(dbconn)
   {
@@ -54,7 +59,7 @@ app.post('/setnn', (req, res)=>{
   }
 });
 
-app.post('/remnn', (req, res)=>{
+app.get('/remnn', (req, res)=>{
   if(dbconn)
   {
     User.deleteOne({ip: req.ip.split(":")[3]}, (err)=>{
@@ -64,7 +69,14 @@ app.post('/remnn', (req, res)=>{
     });
     Message.deleteMany({to: req.ip.split(":")[3]}, (err)=>{
       if(!err)
-        res.redirect('/');
+        res.end('true');
+      else {
+        res.end('err');
+      }
+    });
+    Message.deleteMany({from: req.ip.split(":")[3]}, (err)=>{
+      if(!err)
+        res.end('true');
       else {
         res.end('err');
       }
@@ -96,10 +108,11 @@ app.get('/newmsg', (req, res)=>{
   if(newmsg[req.ip.split(":")[3]] != null)
   {
     obsNewMsg.observe(changes=>{
-      Message.find({to: req.ip.split(":")[3]}).sort('time').exec((err, result)=>{
+      Message.find({$or: [{to: req.ip.split(":")[3]}, {from:req.ip.split(":")[3]}]})
+          .sort('time').exec((err, result)=>{
         var x={};
         var i=0;
-        result.forEach(ress=>{x[i]={from: ress.from, msg: ress.msg, time: ress.time};i++;});
+        result.forEach(ress=>{x[i]={from: ress.from, msg: ress.msg, time: ress.time, to: ress.to};i++;});
         res.end(JSON.stringify(x));
       });
       newmsg[req.ip.split(":")[3]] = false;
@@ -108,15 +121,16 @@ app.get('/newmsg', (req, res)=>{
 });
 
 app.get('/getmsgs', (req, res)=>{
-  Message.find({to: req.ip.split(":")[3]}).sort('time').exec((err, result)=>{
+  Message.find({$or: [{to: req.ip.split(":")[3]}, {from:req.ip.split(":")[3]}]}).sort('time').exec((err, result)=>{
     var x={};
     var i=0;
-    result.forEach(ress=>{x[i]={from: ress.from, msg: ress.msg, time: ress.time};i++;});
+    result.forEach(ress=>{x[i]={from: ress.from, msg: ress.msg, time: ress.time, to: ress.to};i++;});
     res.end(JSON.stringify(x));
   });
       });
 
 
+var port = process.argv.slice(1)[1];
 
-if(app.listen(80))
-  console.log("listening on port 80");
+if(app.listen(port))
+  console.log("listening on port " + port);

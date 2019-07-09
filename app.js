@@ -17,7 +17,9 @@ var obsNewMsg = Observable.from(newmsg);
 const User = require('./models/users');
 const Message = require('./models/message');
 
-mongoose.connect('mongodb+srv://user1:DNlP4zZPgpJNgJux@cluster0-mujak.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true });
+const dbUrl = ''; //Link to MongoDB database
+
+mongoose.connect(dbUrl, { useNewUrlParser: true });
 
 mongoose.connection.once('open', ()=>{
   //connecetd!
